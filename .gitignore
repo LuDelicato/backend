@@ -1,0 +1,9 @@
+# production
+/build
+
+# misc
+.ENV
+.htaccess
+.ico
+
+# resources
