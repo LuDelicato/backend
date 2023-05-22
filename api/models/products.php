@@ -35,10 +35,10 @@ class Products extends Base
     public function create($data)
     {
         $query = $this->db->prepare("
-            INSERT INTO products 
-            (categoryID, brandID, typeID, cover, title, price, qty, description)
-            VALUES (?,?, ?, ?, ?, ?, ?, ?)
-        ");
+        INSERT INTO products 
+        (categoryID, brandID, typeID, cover, title, price, qty, description)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ");
 
         $query->execute([
             $data['categoryID'],
@@ -52,9 +52,10 @@ class Products extends Base
         ]);
 
         $data["id"] = $this->db->lastInsertId();
-        return $data;
 
+        return $data;
     }
+
 
     public function updateItem($id, $data)
     {
@@ -77,20 +78,10 @@ class Products extends Base
         ]);
 
         if ($query->rowCount() > 0) {
-            $updatedItem = $this->getItem($id);
-            $message = "Item with ID " . $id . " was successfully updated.";
-
-            return array('item' => $updatedItem, 'message' => $message);
-
+            return true;
         }
-        else
-        {
-            $message = "Failed to update item with ID " . $id . ".";
-
-            return array('item' => null, 'message' => $message);
-        }
+        return false;
     }
-
 
     public function deleteItem($id, $data)
     {
@@ -100,9 +91,9 @@ class Products extends Base
         ");
 
         if ($query->execute([$id])) {
-            return "Item with ID " . $id . " was successfully deleted.";
-        }
 
-        return "Failed to delete item with ID " . $id . ".";
+            return true;
+        }
+            return false;
     }
 }

@@ -32,26 +32,71 @@ $model = new $className();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
-    $response = isset($resource_id) ? $model->getItem($resource_id) : $model->get();
+    if (isset($resource_id)) {
+
+        $response = $model->getItem($resource_id);
+
+        if ($response) {
+
+            http_response_code(200);
+
+        }
+        else {
+
+            http_response_code(404);
+            $response = array('message' => 'Item not found.');
+
+        }
+    }
+    else {
+        $response = $model->get();
+        http_response_code(200);
+    }
 
 } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $body = file_get_contents("php://input");
     $data = json_decode($body, true);
 
-    http_response_code(202);
     $response = $model->create($data);
 
-} else if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+    if ($response) {
+
+        http_response_code(200);
+        $response = array('message' => 'Item created successfully.', 'item' => $response);
+
+    }
+    else {
+        http_response_code(400);
+        $response = array('message' => 'Failed to create item.');
+
+    }
+}
+else if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
 
     $body = file_get_contents("php://input");
     $data = json_decode($body, true);
 
-    http_response_code(202);
-    $response = isset($resource_id) ? $model->updateItem($resource_id, $data) : null;
+    if (isset($resource_id)) {
 
+        if ($model->updateItem($resource_id, $data)) {
 
-} else if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+            http_response_code(200);
+            $response = array('message' => 'Item with ID ' . $resource_id . ' was successfully updated.');
+
+        }
+        else {
+            http_response_code(400);
+            $response = array('message' => 'Failed to update item with ID ' . $resource_id . '.');
+        }
+    }
+    else {
+        http_response_code(400);
+        $response = array('message' => 'Bad Request: Missing resource ID.');
+    }
+}
+
+ else if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
     $body = file_get_contents("php://input");
     $data = json_decode($body, true);

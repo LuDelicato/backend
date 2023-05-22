@@ -5,5 +5,5 @@
 api/.ENV
 api/.htaccess
 .ico
-
+.idea/
 # resources
