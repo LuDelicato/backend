@@ -23,7 +23,7 @@ $dbPassword = getenv('DB_PASSWORD');
 
 try {
     $db = new PDO("mysql:host=$dbHost;dbname=$dbName;charset=utf8mb4", $dbUsername, $dbPassword);
-    echo "funca!";
+    echo "Connectado!";
 } catch (PDOException $err) {
     die("Conexão falhou: " . $err->getMessage());
 }

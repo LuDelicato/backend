@@ -111,7 +111,7 @@ else if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
             $message = "Item with ID " . $resource_id . " was successfully deleted.";
         } else {
 
-            http_response_code(500);
+            http_response_code(400);
             $message = "Failed to delete item with ID " . $resource_id . ".";
         }
     } else {
