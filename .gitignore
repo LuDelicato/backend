@@ -2,8 +2,8 @@
 /build
 
 # misc
-.ENV
-.htaccess
+api/.ENV
+api/.htaccess
 .ico
 
 # resources
