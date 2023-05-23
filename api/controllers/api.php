@@ -2,7 +2,10 @@
 
 header("Content-Type: application/json");
 
-$allowed_options = ["products"];
+$allowed_options = [
+    "products",
+    "categories"
+];
 
 if(isset($url_parts[2])) {
     $option = $url_parts[2];

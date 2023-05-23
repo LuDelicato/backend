@@ -10,7 +10,8 @@ $controller = "home";
 
 $allowed_controllers = [
     "products",
-    "api"
+    "api",
+    "categories"
 ];
 
 if (!empty($url_parts[1])) {
