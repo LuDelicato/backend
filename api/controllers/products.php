@@ -18,4 +18,3 @@ if (!empty($url_parts[2])) {
 } else {
     $products = $model->get();
 }
-

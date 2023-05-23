@@ -1,14 +1,14 @@
 <?php
 require_once("base.php");
 
-class Categories extends Base
+class Brands extends Base
 {
 
     public function get()
     {
         $query = $this->db->prepare("
         SELECT id, name
-                FROM categories
+                FROM brands
                 
         ");
 
@@ -17,11 +17,11 @@ class Categories extends Base
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getItem($id)
+    public function getID($id)
     {
         $query = $this->db->prepare("
             SELECT id, name
-            FROM categories
+            FROM brands
             WHERE id = ?
         ");
 
@@ -30,13 +30,10 @@ class Categories extends Base
         return $query->fetch(PDO::FETCH_ASSOC);
     }
 
-
-
-
     public function create($data)
     {
         $query = $this->db->prepare("
-            INSERT INTO categories 
+            INSERT INTO brands 
             (name)
             VALUES (?)
             ");
@@ -51,10 +48,10 @@ class Categories extends Base
     }
 
 
-    public function updateItem($id, $data)
+    public function updateID($id, $data)
     {
         $query = $this->db->prepare("
-        UPDATE categories
+        UPDATE brands
         SET name = ?
         WHERE id = ?
     ");
@@ -70,10 +67,10 @@ class Categories extends Base
         return false;
     }
 
-    public function deleteItem($id, $data)
+    public function deleteID($id, $data)
     {
         $query = $this->db->prepare("
-        DELETE FROM categories
+        DELETE FROM brands
         WHERE id = ?
         ");
 

@@ -20,8 +20,14 @@ if (!empty($url_parts[1])) {
 
 if (!empty($url_parts[2])) {
     $id = $url_parts[2];
-} else {
-    $id = null;
+}
+
+if(!empty($url_parts[3])) {
+    $resource_id = $url_parts[3];
+}
+
+if (!empty($url_parts[4])) {
+    $additionalDetail = $url_parts[4];
 }
 
 /* Verificar se o controller pretendido está na nossa whitelist */

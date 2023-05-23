@@ -32,6 +32,37 @@ class Products extends Base
 
     }
 
+    public function getByCategory($id) {
+        $query = $this->db->prepare("
+            SELECT
+                p.id,
+                p.cover,
+                p.title,
+                p.price,
+                p.qty,
+                p.description,
+                cn.name AS category_name,
+                bn.name AS brand_name,
+                tn.name AS type_name,
+                p.modified
+            FROM
+                products AS p
+            LEFT JOIN
+                categories AS cn ON p.categoryID = cn.id
+            LEFT JOIN
+                brands AS bn ON p.brandID = bn.id
+            LEFT JOIN
+                product_types AS tn ON p.typeID = tn.id
+            WHERE
+                cn.id = ?
+        ");
+
+        $query->execute([$id]);
+        return $query->fetchAll();
+    }
+
+
+
     public function create($data)
     {
         $query = $this->db->prepare("
@@ -94,6 +125,6 @@ class Products extends Base
 
             return true;
         }
-            return false;
+        return false;
     }
 }

@@ -15,6 +15,10 @@ if(!empty($url_parts[3])) {
     $resource_id = $url_parts[3];
 }
 
+if (!empty($url_parts[4])) {
+    $additionalDetail = $url_parts[4];
+}
+
 if(empty($option)) {
 
     http_response_code(400);
@@ -35,7 +39,19 @@ $model = new $className();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
-    if (isset($resource_id)) {
+    if ( isset($resource_id) && isset( $additionalDetail)){
+
+        require ("models/" .$additionalDetail. ".php");
+
+        $className = ucwords($additionalDetail);
+
+        $detailModel = new $className();
+
+        $response = $detailModel->getByCategory($resource_id);
+
+    }
+
+    else if (isset($resource_id)) {
 
         $response = $model->getItem($resource_id);
 
@@ -99,7 +115,7 @@ else if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     }
 }
 
- else if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+else if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
     $body = file_get_contents("php://input");
     $data = json_decode($body, true);
