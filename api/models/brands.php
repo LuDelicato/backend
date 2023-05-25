@@ -17,7 +17,7 @@ class Brands extends Base
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getID($id)
+    public function getItem($id)
     {
         $query = $this->db->prepare("
             SELECT id, name
@@ -48,7 +48,7 @@ class Brands extends Base
     }
 
 
-    public function updateID($id, $data)
+    public function updateItem($id, $data)
     {
         $query = $this->db->prepare("
         UPDATE brands
@@ -67,7 +67,7 @@ class Brands extends Base
         return false;
     }
 
-    public function deleteID($id, $data)
+    public function deleteItem($id, $data)
     {
         $query = $this->db->prepare("
         DELETE FROM brands

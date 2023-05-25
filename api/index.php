@@ -12,6 +12,7 @@ $allowed_controllers = [
     "products",
     "api",
     "categories"
+
 ];
 
 if (!empty($url_parts[1])) {
@@ -26,9 +27,6 @@ if(!empty($url_parts[3])) {
     $resource_id = $url_parts[3];
 }
 
-if (!empty($url_parts[4])) {
-    $additionalDetail = $url_parts[4];
-}
 
 /* Verificar se o controller pretendido está na nossa whitelist */
 if ( !in_array($controller, $allowed_controllers)){

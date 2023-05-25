@@ -1,10 +1,13 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 header("Content-Type: application/json");
 
 $allowed_options = [
     "products",
-    "categories"
+    "categories",
+    "brands"
 ];
 
 if(isset($url_parts[2])) {
@@ -18,6 +21,7 @@ if(!empty($url_parts[3])) {
 if (!empty($url_parts[4])) {
     $additionalDetail = $url_parts[4];
 }
+
 
 if(empty($option)) {
 
@@ -50,8 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $response = $detailModel->getByCategory($resource_id);
 
     }
-
-    else if (isset($resource_id)) {
+        else if (isset($resource_id)) {
 
         $response = $model->getItem($resource_id);
 
@@ -71,6 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $response = $model->get();
         http_response_code(200);
     }
+
 
 } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 

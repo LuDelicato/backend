@@ -6,7 +6,7 @@ class Products extends Base
     public function get()
     {
         $query = $this->db->prepare("
-        SELECT id, title, cover, qty, description, modified
+        SELECT product_id, name, image, stock, description, modified
         FROM products
     ");
 
@@ -19,9 +19,9 @@ class Products extends Base
     {
 
         $query = $this->db->prepare("
-                SELECT id, title, description, price, qty, cover, modified
+                SELECT product_id, name, description, price, stock, image, modified
                 FROM products
-                WHERE id = ?
+                WHERE product_id = ?
             ");
 
         $query->execute([
@@ -35,24 +35,21 @@ class Products extends Base
     public function getByCategory($id) {
         $query = $this->db->prepare("
             SELECT
-                p.id,
-                p.cover,
-                p.title,
+                p.product_id,
+                p.image,
+                p.name,
                 p.price,
-                p.qty,
+                p.stock,
                 p.description,
                 cn.name AS category_name,
                 bn.name AS brand_name,
-                tn.name AS type_name,
                 p.modified
             FROM
                 products AS p
             LEFT JOIN
-                categories AS cn ON p.categoryID = cn.id
+                categories AS cn ON p.category_id = cn.id
             LEFT JOIN
                 brands AS bn ON p.brandID = bn.id
-            LEFT JOIN
-                product_types AS tn ON p.typeID = tn.id
             WHERE
                 cn.id = ?
         ");
@@ -61,28 +58,41 @@ class Products extends Base
         return $query->fetchAll();
     }
 
+   /* for later
+    public function getByBrand($id) {
+        $query = $this->db->prepare("
+            SELECT p.product_id, p.name, p.name, p.price, p.stock, p.description, b.name AS brand, c.name AS category, p.modified
+            FROM products AS p
+            JOIN brands AS b ON p.brandID = b.id
+            JOIN categories AS c ON p.category_id = c.id
+            WHERE b.id = ?
+        ");
 
+        $query->execute([$id]);
+
+        return $query->fetchAll();
+    }
+   */
 
     public function create($data)
     {
         $query = $this->db->prepare("
         INSERT INTO products 
-        (categoryID, brandID, typeID, cover, title, price, qty, description)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        (category_id, brandID, image, name, price, stock, description)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
     ");
 
         $query->execute([
-            $data['categoryID'],
+            $data['category_id'],
             $data['brandID'],
-            $data['typeID'],
-            $data['cover'],
-            $data['title'],
+            $data['image'],
+            $data['name'],
             $data['price'],
-            $data['qty'],
+            $data['stock'],
             $data['description']
         ]);
 
-        $data["id"] = $this->db->lastInsertId();
+        $data["product_id"] = $this->db->lastInsertId();
 
         return $data;
     }
@@ -92,18 +102,17 @@ class Products extends Base
     {
         $query = $this->db->prepare("
         UPDATE products
-        SET categoryID = ?, brandID = ?, typeID = ?, cover = ?, title = ?, price = ?, qty = ?, description = ?, modified = current_timestamp()
-        WHERE id = ?
+        SET category_id = ?, brandID = ?, image = ?, name = ?, price = ?, stock = ?, description = ?, modified = current_timestamp()
+        WHERE product_id = ?
     ");
 
         $query->execute([
-            $data['categoryID'],
+            $data['category_id'],
             $data['brandID'],
-            $data['typeID'],
-            $data['cover'],
-            $data['title'],
+            $data['image'],
+            $data['name'],
             $data['price'],
-            $data['qty'],
+            $data['stock'],
             $data['description'],
             $id
         ]);
@@ -118,7 +127,7 @@ class Products extends Base
     {
         $query = $this->db->prepare("
         DELETE FROM products
-        WHERE id = ?
+        WHERE product_id = ?
         ");
 
         if ($query->execute([$id])) {
