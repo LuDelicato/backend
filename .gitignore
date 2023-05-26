@@ -2,8 +2,10 @@
 /build
 
 # misc
-api/.ENV
+api/.env
 api/.htaccess
 .ico
 .idea/
 # resources
+
+/vendor/

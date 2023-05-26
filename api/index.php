@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . "/../vendor/autoload.php");
 
 session_start();
 
@@ -8,12 +9,18 @@ define("ENV", parse_ini_file(".env"));
 
 $controller = "home";
 
-$allowed_controllers = [
-    "products",
-    "api",
-    "categories"
-
-];
+$allowed_controllers =
+    [
+        "cart",
+        "checkout",
+        "home",
+        "login",
+        "logout",
+        "products",
+        "register",
+        "categories",
+        "api"
+    ];
 
 if (!empty($url_parts[1])) {
     $controller = $url_parts[1];
@@ -27,8 +34,6 @@ if(!empty($url_parts[3])) {
     $resource_id = $url_parts[3];
 }
 
-
-/* Verificar se o controller pretendido está na nossa whitelist */
 if ( !in_array($controller, $allowed_controllers)){
     http_response_code(404);
     die("Não encontrado");

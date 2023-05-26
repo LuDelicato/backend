@@ -1,13 +1,13 @@
-<?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+<?php /** @noinspection PhpUndefinedVariableInspection */
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
 header("Content-Type: application/json");
 
 $allowed_options = [
     "products",
     "categories",
-    "brands"
+    "brands",
+    "users"
 ];
 
 if(isset($url_parts[2])) {
@@ -76,25 +76,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 
 
-} else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+}
+else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $body = file_get_contents("php://input");
     $data = json_decode($body, true);
 
-    $response = $model->create($data);
+    if ($resource_id === "login") {
+        require_once __DIR__ . "/../models/JwtHandler.php";
 
-    if ($response) {
+        $jwtHandler = new JwtHandler();
+        $users = new Users();
+        $response = $users->login($data);
 
-        http_response_code(200);
-        $response = array('message' => 'Item created successfully.', 'item' => $response);
 
-    }
-    else {
-        http_response_code(400);
-        $response = array('message' => 'Failed to create item.');
+        if (isset($response['message'])) {
+            if ($response['message'] === 'Email ou Password incorretos') {
+                http_response_code(403);
+                $response = array('message' => 'Invalid email or password');
+            }
+        } else {
+            http_response_code(200);
+        }
 
+    } else {
+
+        $className = ucwords($option);
+        $model = new $className();
+        $response = $model->create($data);
+
+        if ($response) {
+            http_response_code(200);
+            $response = array('message' => 'Item created successfully.', 'item' => $response);
+        } else {
+            http_response_code(400);
+            $response = array('message' => 'Failed to create item.');
+        }
     }
 }
+
+
 else if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
 
     $body = file_get_contents("php://input");

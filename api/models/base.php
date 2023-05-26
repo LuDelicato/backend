@@ -3,19 +3,19 @@
 class Base
 {
     public $db;
+    public $secretKey;
 
     public function __construct()
     {
-        $env = parse_ini_file('.env');
-
-        $dbHost = $env['DB_HOST'];
-        $dbName = $env['DB_NAME'];
-        $dbUser = $env['DB_USER'];
-        $dbPassword = $env['DB_PASSWORD'];
+        $dbHost = ENV['DB_HOST'];
+        $dbName = ENV['DB_NAME'];
+        $dbUser = ENV['DB_USER'];
+        $dbPassword = ENV['DB_PASSWORD'];
+        $this->secretKey = ENV['JWT_SECRET_KEY'];
 
         try {
             $this->db = new PDO(
-                "mysql:host={$dbHost};dbname={$dbName};charset=utf8mb4",
+                "mysql:host=$dbHost;dbname=$dbName;charset=utf8mb4",
                 $dbUser,
                 $dbPassword,
                 [

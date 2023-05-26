@@ -63,8 +63,8 @@ class Products extends Base
         $query = $this->db->prepare("
             SELECT p.product_id, p.name, p.name, p.price, p.stock, p.description, b.name AS brand, c.name AS category, p.modified
             FROM products AS p
-            JOIN brands AS b ON p.brandID = b.id
-            JOIN categories AS c ON p.category_id = c.id
+            INNER JOIN brands AS b ON p.brandID = b.id
+            INNER JOIN categories AS c ON p.category_id = c.id
             WHERE b.id = ?
         ");
 
